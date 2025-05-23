@@ -1,11 +1,12 @@
-import { Injectable } from '@nestjs/common';
-import axios from './../../node_modules/axios/index.d';
+import { Injectable, Logger } from '@nestjs/common';
+import axios, { AxiosResponse } from 'axios';
 import { Pais } from 'src/model/Pais';
 
 
 @Injectable()
 export class PaisesService {
   urlGlobal:string = 'https://restcountries.com/v2/all';
+  private readonly logger = new Logger(PaisesService.name);
 
   // constructor(private readonly http:HttpService){
 
@@ -13,7 +14,7 @@ export class PaisesService {
 
   async findByContinente(continente:string):Promise<Pais[]>{
 
-    const response = await axios.get(this.urlGlobal);
+    const response:AxiosResponse<any> = await axios.get(this.urlGlobal);
     const paisesPorContinente:Pais[] = response.data.filter((pais) => pais.region === continente)
     .map(p => new Pais(p.name, p.region, p.population, p.capital, p.flag));
         
@@ -21,16 +22,18 @@ export class PaisesService {
   }
 
   async findAllContinentes():Promise<string[]>{
-    const response= await axios.get(this.urlGlobal);
+    const response:AxiosResponse<any>= await axios.get(this.urlGlobal);
 
     const continentes:string[] = response.data.map(p => p.region);
-
+    // .filter((region, index, self) => region && self.indexOf(region) === index);;
+    this.logger.log('Continentes',continentes);
     return [... new Set(continentes)];
+
   }
 
   async findPoblacionMax():Promise<Pais>{
-    const response= await axios.get(this.urlGlobal);
-     const paises:Pais[] = response.data
+    const response:AxiosResponse<any>= await axios.get(this.urlGlobal);
+    const paises:Pais[] = response.data
     .map(p => new Pais(p.name, p.region, p.population, p.capital, p.flag));
         
     const paisConPoblacionMaxima = paises.reduce((max, pais) => {
