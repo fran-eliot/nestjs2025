@@ -1,0 +1,153 @@
+CREATE USER 'nestuser'@'localhost' IDENTIFIED WITH mysql_native_password BY 'nestpass';
+GRANT ALL PRIVILEGES ON agenda.* TO 'nestuser'@'localhost';
+FLUSH PRIVILEGES;
+
+@Entity("contactos")
+export class Contacto{
+    @PrimaryGeneratedColumn("identity")
+    idContacto:number;
+    @Column()
+    nombre:string;
+    @Column()
+    email:string;
+    @Column({nullable:true})
+    telefono:string;
+    constructor(idContacto?:number,nombre?:string,email?:string,telefono?:string){
+        this.idContacto=idContacto;
+        this.nombre=nombre;
+        this.email=email;
+        this.telefono=telefono;
+    }
+} 
+
+ContactosService
+
+constructor(@InjectRepository(Contacto) private contactosRepository:Repository<Contacto>){
+  }
+  save(contacto:Contacto):Promise<Contacto>{
+    return this.contactosRepository.save(contacto);
+  }
+  findByNombre(nombre:string):Promise<Contacto>{
+    return this.contactosRepository.findOneBy({nombre:n})
+  }
+  findAll():Promise<Contacto[]>{
+    return this.contactosRepository.find();
+  }
+  deleteByEmail(email:string):void{
+    this.contactosRepository.delete({email:email});
+  } 
+
+ContactosController
+
+constructor(private readonly contactosService: ContactosService) {}
+
+  @Post("alta")
+  create(@Body() contacto: Contacto) {
+    return this.contactosService.save(contacto);
+  }
+
+  @Get("todos")
+  findAll() {
+    return this.contactosService.findAll();
+  }
+
+  @Get('buscar/:name')
+  findOne(@Param('name') name: string) {
+    return this.contactosService.findByNombre(name);
+  }
+
+  @Delete('eliminar/:email')
+  remove(@Param('email') email: string) {
+    return this.contactosService.deleteByEmail(email);
+  }
+
+@Module({
+  imports: [TypeOrmModule.forRoot({
+  type: 'mysql',
+  host: 'localhost',
+  port: 3306,
+  username: 'nestuser',
+  password: 'nestpass',
+  database: 'agenda',
+  entities: [Contacto],
+  synchronize: false,
+  }),TypeOrmModule.forFeature([Contacto])],
+  controllers: [ContactosController],
+  providers: [ContactosService],
+})
+export class AppModule {}
+
+
+@Post("alta")
+  async create(@Body() contacto: Contacto,@Res() response:Response) {
+    const resultado:boolean=await 
+this.contactosService.save
+(contacto);
+    if(resultado){
+      response.status(200).send();
+    }else{
+      response.status(409).send();
+    }
+  } 
+
+
+
+constructor(@InjectRepository(Contacto) private contactosRepository:Repository<Contacto>){
+  }
+  //no se permiten contactos con el mismo email. Si se intenta dar de alta
+  //un contacto con email existente, no se dará de alta y se devolverá false
+  //Si el alta es posible, se devuelve true
+  async save(contacto:Contacto)😛romise<boolean>{
+    const resultado:Contacto=await this.contactosRepository.findOneBy({email:contacto.email});
+    if(resultado){
+      return false;
+    }else{
+      
+this.contactosRepository.save
+(contacto);
+      return true;
+    }
+     
+  } 
+  findByNombre(n😒tring)😛romise<Contacto>{
+    return this.contactosRepository.findOneBy({nombre:n})
+  }
+  findAll()😛romise<Contacto[]>{
+    return this.contactosRepository.find();
+  }
+  async deleteByEmail(email😒tring)😛romise<boolean>{
+    //devuelve un boolean, indicando si lo ah eliminado o no
+    const result😄eleteResult=await this.contactosRepository.delete({email:email});
+    return result.affected>0;
+  } 
+
+mport {Response } from 'express';
+
+
+
+@Post("alta")
+  async create(@Body() contacto: Contacto,@Res() response:Response) {
+    const resultado:boolean=await 
+this.contactosService.save
+(contacto);
+    if(resultado){
+      response.status(200).send();
+    }else{
+      response.status(409).send();
+    }
+  } 
+
+nombre😒tring;
+  email😒tring;
+  telefono😒tring;
+  //generame el constructor con los parametros opcionales
+  constructor(nombre?😒tring, email?😒tring, telefono?😒tring){
+    this.nombre = nombre || '';
+    
+this.email
+ = email || '';
+    this.telefono = telefono || '';
+  } 
+
+
+

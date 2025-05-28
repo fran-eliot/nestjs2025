@@ -1,0 +1,167 @@
+url:string="
+http://localhost:3000/contactos
+";
+  constructor(private http:HttpClient) { }
+  //el posible error 409 se captura en el componente
+  /*alta(contacto:Contacto)😮bservable<any>{
+    return 
+this.http.post
+(this.url+"/alta",contacto);
+
+  }*/
+  //el posible error 409 se captura aquí en el service
+  alta(contacto:Contacto)😮bservable<boolean>{
+    return 
+this.http.post
+(this.url+"/alta",contacto)
+    .pipe(map(()=>true),
+              catchError(e=>of(false)));
+  } 
+
+
+
+
+Servicio banca:
+
+-Alta de nuevos movimientos
+-Recuperar movimientos por cuenta
+-Recuperar movimientos entre rango de fechas 
+
+
+
+npm install @nestjs/typeorm@11 typeorm@0.3 mysql2 
+
+import { Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity } from 'typeorm';
+@Entity("movimientos")
+export class Movimiento{
+    @PrimaryGeneratedColumn()
+    idMovimiento:number;
+    @Column()
+    idCuenta:number;
+    @Column({type:"datetime"})
+    fecha😄ate;
+    @Column()
+    cantidad:number;
+    @Column()
+    operacion😒tring;
+    // Constructor para inicializar los campos de la clase con todos los parámetros opcionales
+    constructor(idMovimiento?:number, idCuenta?:number, fecha?😄ate, cantidad?:number, operacion?😒tring){  
+        this.idMovimiento = idMovimiento || 0; // Si no se proporciona, se inicializa a 0
+        this.idCuenta = idCuenta || 0; // Si no se proporciona, se inicializa a 0
+        this.fecha = fecha || new Date(); // Si no se proporciona, se inicializa a la fecha actual
+        this.cantidad = cantidad || 0; // Si no se proporciona, se inicializa a 0
+        this.operacion = operacion || ''; // Si no se proporciona, se inicializa a una cadena vacía
+    }
+} 
+
+
+
+@Injectable()
+export class MovimientosService {
+ constructor(@InjectRepository(Movimiento) private repository:Repository<Movimiento>){
+  
+ }
+
+ save(movimiento:Movimiento):void{
+  
+this.repository.save
+(movimiento);
+ }
+
+ findByIdCuenta(idCuenta:number)😛romise<Movimiento[]>{
+  return this.repository.findBy({idCuenta:idCuenta});
+ }
+ findByFechas(fecha1😄ate,fecha2😄ate)😛romise<Movimiento[]>{
+  return this.repository.findBy({fecha:Between(fecha1,fecha2)});
+ }
+} 
+
+[TypeOrmModule.forRoot({
+    type: 'mysql',
+    host: 'localhost',
+    port: 3306,
+    username: 'nestuser',
+    password: 'nestpass',
+    database: 'bancabd',
+    entities: [Movimiento],
+    synchronize: false,
+  }), TypeOrmModule.forFeature([Movimiento])] 
+
+Comando para crear el usuario y darle persisos en una determinada base de datos: CREATE USER 'nestuser'@'localhost' IDENTIFIED WITH mysql_native_password BY 'nestpass';
+GRANT ALL PRIVILEGES ON libros.* TO 'nestuser'@'localhost';
+FLUSH PRIVILEGES;
+
+Este comando es solo para darle permisos en una base de datos: GRANT ALL PRIVILEGES ON formacion.* TO 'nestuser'@'localhost';
+FLUSH PRIVILEGES; 
+
+@Post('alta')
+  nuevoMovimiento(@Body() movimiento: any) {
+    return 
+this.movimientosService.save
+(movimiento);
+  }
+
+  @Get('cuenta/:idCuenta')
+  findByIdCuenta(@Param('idCuenta') idCuenta: number) {
+    return this.movimientosService.findByIdCuenta(idCuenta);
+  }
+
+  @Get('fechas')
+  buscarPorFechas(@Query('fecha1') fecha1: Date, @Query('fecha2') fecha2: Date) {
+    console.log('fecha1 '+ fecha1)
+    console.log('fecha2 '+ fecha2)
+    return this.movimientosService.findByFechas(fecha1, fecha2);
+  } 
+
+save(movimiento: Movimiento):void {
+    
+this.repository.save
+(movimiento);
+  }
+
+  findByIdCuenta(idCuenta: number): Promise<Movimiento[]> {
+    return this.repository.findBy({idCuenta: idCuenta });
+    }
+
+  findByFechas(fecha1: Date, fecha2: Date): Promise<Movimiento[]> {
+    return this.repository.findBy({fecha:Between(fecha1, fecha2)});
+  } 
+
+import { Injectable } from "@nestjs/common";
+import { InjectRepository } from "@nestjs/typeorm";
+import { Movimiento } from "src/model/Movimiento";
+import { Between, Repository } from "typeorm";
+
+@Injectable()
+export class MovimientosService {
+  constructor(@InjectRepository(Movimiento) private repository:Repository<Movimiento>) {
+
+  }
+
+  save(movimiento: Movimiento):void {
+    
+this.repository.save
+(movimiento);
+  }
+
+  findByIdCuenta(idCuenta: number): Promise<Movimiento[]> {
+    return this.repository.findBy({idCuenta: idCuenta });
+    }
+
+  findByFechas(fecha1: Date, fecha2: Date): Promise<Movimiento[]> {
+    return this.repository.findBy({fecha:Between(fecha1, fecha2)});
+  }
+} 
+
+CREATE USER 'nestuser'@'localhost' IDENTIFIED WITH mysql_native_password BY 'nestpass'; 
+
+constructor(private http:HttpClient) { }
+  urlBase:string="
+http://localhost:3000/movimientos/
+";
+  buscarPorFechas(fecha1😄ate,fecha2😄ate)😮bservable<Movimiento[]>{
+    return this.http.get<Movimiento[]>(`${this.urlBase}fechas?fecha1=${fecha1}&fecha2=${fecha2}`);
+  }
+} 
+
