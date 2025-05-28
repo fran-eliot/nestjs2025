@@ -1,0 +1,70 @@
+import { Component } from '@angular/core';
+import { Movimiento } from '../../model/Movimiento';
+import { MovimientosService } from '../../service/movimientos.service';
+import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+
+@Component({
+  selector: 'app-movimientos',
+  imports: [FormsModule,CommonModule],
+  templateUrl: './movimientos.component.html',
+  styleUrl: './movimientos.component.css'
+})
+export class MovimientosComponent {
+  fecha1😄ate;
+  fecha2😄ate;
+  movimientos:Movimiento[];
+
+  constructor(private movimientosService:MovimientosService){
+
+  }
+  verMovimientos(){
+    this.movimientosService.buscarPorFechas(this.fecha1,this.fecha2)
+    .subscribe(data=>this.movimientos=data);
+  }
+} 
+
+
+
+findByIdCuenta(idCuenta:number)😛romise<Movimiento[]>{
+  return this.repository.find({
+    where:{
+        cuenta:{
+            numeroCuenta:idCuenta
+        }
+    }
+  });
+ } 
+
+
+Listado de cuentas que hayan tenido movimientos en una determinada fecha
+
+Listado de cuentas en las que se hayan realizado extracciones superiores a una determinada cantidad
+
+Listado de movimientos realizados por cuentas cuyo saldo sea superior a una determinada cantidad
+
+
+
+
+<div>
+  Selecciona desde que fecha:
+  <input title="fecha1" type="date" name="fecha1" id="" [(ngModel)]="fecha1" />
+  <br /><br />
+  Selecciona hasta que fecha:
+  <input title="fecha2" type="date" name="fecha1" id="" [(ngModel)]="fecha2" />
+</div>
+<div>
+  <table>
+    <thead>
+      <th>Fecha Incial: {{ fecha1 }}</th>
+      <th>Fecha Final: {{ fecha2 }}</th>
+    </thead>
+    <tbody *ngFor="let m of movimientos">
+      <td>{{ m.fecha }}</td>
+      <td>{{ m.cantidad }}</td>
+      <td>{{ m.idCuenta }}</td>
+      <td>{{ m.operacion }}</td>
+    </tbody>
+  </table>
+  <button title="buscar" (click)="buscarFechas()" > BUSCAR </button>
+</div> 
