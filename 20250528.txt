@@ -11,8 +11,8 @@ import { CommonModule } from '@angular/common';
   styleUrl: './movimientos.component.css'
 })
 export class MovimientosComponent {
-  fecha1😄ate;
-  fecha2😄ate;
+  fecha1:date;
+  fecha2:date;
   movimientos:Movimiento[];
 
   constructor(private movimientosService:MovimientosService){
@@ -32,7 +32,8 @@ findByIdCuenta(idCuenta:number)😛romise<Movimiento[]>{
         cuenta:{
             numeroCuenta:idCuenta
         }
-    }
+    },
+	relation:['movimientos']
   });
  } 
 
