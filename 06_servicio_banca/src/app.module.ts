@@ -6,18 +6,19 @@ import { Movimiento } from './model/Movimiento';
 import { CuentasController } from './controller/cuentas.controller';
 import { CuentasService } from './service/cuentas.service';
 import { Cuenta } from './model/Cuenta';
+import { Cliente } from './model/Cliente';
 
 @Module({
   imports: [TypeOrmModule.forRoot({
     type: 'mysql',
     host: 'localhost',
-    port: 3307,
+    port: 3306,
     username: 'nestuser',
     password: 'nestpass',
     database: 'bancabd',
-    entities: [Movimiento,Cuenta],
+    entities: [Movimiento,Cuenta,Cliente],
     synchronize: false,
-  }), TypeOrmModule.forFeature([Movimiento,Cuenta])],
+  }), TypeOrmModule.forFeature([Movimiento,Cuenta,Cliente])],
   controllers: [MovimientosController,CuentasController],
   providers: [MovimientosService,CuentasService],
 })

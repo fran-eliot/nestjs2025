@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Cliente } from 'src/model/Cliente';
 import { Cuenta } from 'src/model/Cuenta';
 import { Movimiento } from 'src/model/Movimiento';
 import { MoreThan, Repository } from 'typeorm';
@@ -8,7 +9,9 @@ import { MoreThan, Repository } from 'typeorm';
 @Injectable()
 export class CuentasService {
 
-  constructor(@InjectRepository(Movimiento) private movimientosRepository:Repository<Movimiento>){
+  constructor(@InjectRepository(Movimiento) private movimientosRepository:Repository<Movimiento>,
+              @InjectRepository(Cuenta) private cuentasRepository:Repository<Cuenta>,
+              @InjectRepository(Cliente) private clientesRepository:Repository<Cliente>){
 
   }
 
@@ -33,6 +36,20 @@ export class CuentasService {
     return movimientos.map(m=>m.cuenta);
   }
 
-
+  //cuentas asociada al titular cuyo dni se proporciona como parámetro
+  async findByDni(dni:number):Promise<Cuenta[]>{
+    const cliente:Cliente=await this.clientesRepository.findOne({
+      where:{
+        dni:dni
+      },
+      relations:['cuentas']
+      });
+    if(cliente){
+      return cliente.cuentas;
+    }else{
+      return [];
+    }
+    
+  }
   
 }
