@@ -39,4 +39,11 @@ export class CuentasController {
     }
   }
 
+  @Post('alta')
+  altaCuenta(@Body() datos:any){
+    const cuenta:Cuenta=datos.cuenta;
+    const dnis:number[]=datos.dnis;
+    this.cuentasService.altaCuenta(cuenta,dnis);
+  }
+
 }

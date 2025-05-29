@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Cliente } from 'src/model/Cliente';
 import { Cuenta } from 'src/model/Cuenta';
 import { Movimiento } from 'src/model/Movimiento';
-import { MoreThan, Repository } from 'typeorm';
+import { In, MoreThan, Repository } from 'typeorm';
 
 
 @Injectable()
@@ -50,6 +50,14 @@ export class CuentasService {
       return [];
     }
     
+  }
+
+  //Recibe un objeto cuenta y un array con los dnis de los titulares
+  //El método dará de alta dicha cuenta y le asignará esos titulares
+  async altaCuenta(cuenta:Cuenta,titulares:number[]){
+     const clientes: Cliente[] = await this.clientesRepository.findBy({ dni:In(titulares) });
+     cuenta.clientes = clientes;
+     this.cuentasRepository.save(cuenta);
   }
   
 }
