@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { AlumnoResultadoDTO } from 'src/dtos/AlumnOResultadoDTO';
 import { Alumno } from 'src/model/Alumno';
 import { Repository } from 'typeorm';
 
@@ -7,25 +8,27 @@ import { Repository } from 'typeorm';
 export class AlumnoService {
   constructor(@InjectRepository(Alumno) private readonly alumnosRepository:Repository<Alumno>){}
 
-  async findByIdCurso(idCurso:number):Promise<Alumno[]>{
-    return this.alumnosRepository.createQueryBuilder("alumno")
+  async findByIdCurso(idCurso:number):Promise<AlumnoResultadoDTO[]>{
+    return ( await this.alumnosRepository.createQueryBuilder("alumno")
     .innerJoin("alumno.cursos", "c") // Relación con la tabla cursos
     .where("c.idCurso = :idCurso", { idCurso }) // Corrección en la sintaxis del parámetro
-    .getMany(); // Obtiene los alumnos relacionados con el curso
+    .getMany())
+    .map(a=>new AlumnoResultadoDTO(a.usuario,a.password,a.nombre,a.email,a.edad)); // Obtiene los alumnos relacionados con el curso
   }
 
-  async findByAlumnosNoMatriculadosEncurso(idCurso:number):Promise<Alumno[]> {
-    const alumnosMatriculados = await this.findByIdCurso(idCurso);
+  async findByAlumnosNoMatriculadosEncurso(idCurso:number):Promise<AlumnoResultadoDTO[]> {
+    const alumnosMatriculados:AlumnoResultadoDTO[] = await this.findByIdCurso(idCurso);
     // Extraer los IDs de los alumnos matriculados 
-    const idsMatriculados = alumnosMatriculados.map(alumno => alumno.usuario);
+    const usuariosMatriculados:string[] = alumnosMatriculados.map(alumno => alumno.usuario);
     // Si no hay alumnos matriculados, devolver todos los alumnos 
-    if (idsMatriculados.length === 0) { 
+    if (usuariosMatriculados.length === 0) { 
       return this.alumnosRepository.find(); }
     
     // Realizar la consulta para obtener los alumnos que no están en la lista de IDs
-    return this.alumnosRepository.createQueryBuilder("alumno")
-      .where("alumno.usuario NOT IN (:...idsMatriculados)", { idsMatriculados })
-      .getMany();
+    return (await this.alumnosRepository.createQueryBuilder("alumno")
+      .where("alumno.usuario NOT IN (:...usuariosMatriculados)", { usuariosMatriculados })
+      .getMany())
+      .map(a=>new AlumnoResultadoDTO(a.usuario,a.password,a.nombre,a.email,a.edad));
   }
 
   // async findByAlumnosNoMatriculadosEnCurso(idCurso:number):Promise<Alumno[]>{
