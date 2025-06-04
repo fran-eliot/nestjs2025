@@ -13,6 +13,7 @@ import { Response } from 'express';
 import { MatriculaNuevaDTO } from 'src/dtos/MatriculaNuevaDTO';
 import { CursoResultadoDTO } from 'src/dtos/CursoResultadoDTO';
 import { AlumnoResultadoDTO } from 'src/dtos/AlumnOResultadoDTO';
+import { CursoAltaDTO } from 'src/dtos/CursoAltaDTO';
 
 
 @Controller('formacion')
@@ -40,7 +41,11 @@ export class FormacionController {
     }else{
       response.status(409).send();
     }
+  }
 
+  @Post('nuevoCurso')
+  nuevoCurso(@Body() curso:CursoAltaDTO){
+    return this.cursoService.save(curso);
   }
   
 }

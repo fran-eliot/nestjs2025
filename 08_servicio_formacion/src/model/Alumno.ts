@@ -1,5 +1,6 @@
 import { Column, Entity, ManyToMany, PrimaryColumn } from "typeorm";
 import { Curso } from "./Curso";
+import { CursoResultadoDTO } from "src/dtos/CursoResultadoDTO";
 
 
 @Entity('alumnos')

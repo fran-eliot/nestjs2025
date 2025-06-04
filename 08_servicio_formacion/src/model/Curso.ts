@@ -1,5 +1,6 @@
 import { Column, Entity, JoinTable, ManyToMany, PrimaryGeneratedColumn } from "typeorm";
 import { Alumno } from "./Alumno";
+import { AlumnoResultadoDTO } from "src/dtos/AlumnOResultadoDTO";
 
 @Entity('cursos')
 export class Curso{

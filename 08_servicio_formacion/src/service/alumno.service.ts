@@ -12,8 +12,8 @@ export class AlumnoService {
     return ( await this.alumnosRepository.createQueryBuilder("alumno")
     .innerJoin("alumno.cursos", "c") // Relación con la tabla cursos
     .where("c.idCurso = :idCurso", { idCurso }) // Corrección en la sintaxis del parámetro
-    .getMany())
-    .map(a=>new AlumnoResultadoDTO(a.usuario,a.password,a.nombre,a.email,a.edad)); // Obtiene los alumnos relacionados con el curso
+    .getMany());
+    // .map(a=>new AlumnoResultadoDTO(a.usuario,a.password,a.nombre,a.email,a.edad)); // Obtiene los alumnos relacionados con el curso
   }
 
   async findByAlumnosNoMatriculadosEncurso(idCurso:number):Promise<AlumnoResultadoDTO[]> {
@@ -27,8 +27,9 @@ export class AlumnoService {
     // Realizar la consulta para obtener los alumnos que no están en la lista de IDs
     return (await this.alumnosRepository.createQueryBuilder("alumno")
       .where("alumno.usuario NOT IN (:...usuariosMatriculados)", { usuariosMatriculados })
-      .getMany())
-      .map(a=>new AlumnoResultadoDTO(a.usuario,a.password,a.nombre,a.email,a.edad));
+      .getMany());
+      // .map(a=>new AlumnoResultadoDTO(a.usuario,a.password,a.nombre,a.email,a.edad));
+      //Lo anterior se hace de forma automática si los nombres de campos coinciden
   }
 
   // async findByAlumnosNoMatriculadosEnCurso(idCurso:number):Promise<Alumno[]>{
