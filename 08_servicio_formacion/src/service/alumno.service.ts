@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { AlumnoResultadoDTO } from 'src/dtos/AlumnOResultadoDTO';
+import { AlumnoAltaDTO } from 'src/dtos/AlumnoAltaDTO';
+import { AlumnoResultadoDTO } from 'src/dtos/AlumnoResultadoDTO';
 import { Alumno } from 'src/model/Alumno';
 import { Repository } from 'typeorm';
 
@@ -38,4 +39,8 @@ export class AlumnoService {
   //   .where("c.idCurso IS NULL OR c.idCurso != :idCurso", { idCurso }) // Filtrar alumnos no matriculados en el curso dado
   //   .getMany(); // Obtener los resultados
   // }
+
+    save(alumno:AlumnoAltaDTO):Promise<AlumnoResultadoDTO>{
+      return this.alumnosRepository.save(alumno);
+    }
 }
