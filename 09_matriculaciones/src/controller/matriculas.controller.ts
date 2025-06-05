@@ -15,7 +15,12 @@ export class MatriculasController {
   constructor(private readonly matriculasService: MatriculasService) {}
 
   @Get('matriculas/:idCurso')
-  getMatricula(@Param() idCurso:number){
+  getMatricula(@Param('idCurso') idCurso:number){
     return this.matriculasService.findByCurso(idCurso);
+  }
+
+  @Get('cursos')
+  cursos(){
+    return this.matriculasService.findCursosAll();
   }
 }

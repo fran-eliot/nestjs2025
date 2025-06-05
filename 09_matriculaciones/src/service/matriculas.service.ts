@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { CursoDatosDTO } from 'src/dtos/CursoDatosDTO';
 import { MatriculaDatosDTO } from 'src/dtos/MatriculaDatosDTO';
 import { Alumno } from 'src/model/Alumno';
 import { Curso } from 'src/model/Curso';
@@ -9,7 +10,8 @@ import { Repository } from 'typeorm';
 
 @Injectable()
 export class MatriculasService {
-  constructor(@InjectRepository(Matricula) private readonly matriculasRepository:Repository<Matricula>
+  constructor(@InjectRepository(Matricula) private readonly matriculasRepository:Repository<Matricula>, 
+  @InjectRepository(Curso) private readonly cursosRepository:Repository<Curso>
   ){}
 
   async findByCurso(idCurso:number):Promise<MatriculaDatosDTO[]>{
@@ -23,6 +25,12 @@ export class MatriculasService {
     
   }
 
+
+
+  async findCursosAll():Promise<CursoDatosDTO[]>{
+    const cursos:Curso[]= await this.cursosRepository.find();
+    return cursos.map(c=>new CursoDatosDTO(c.idCurso,c.nombre));
+  }
 
 
 }
