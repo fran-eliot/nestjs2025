@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CursoDatosDTO } from 'src/dtos/CursoDatosDTO';
 import { MatriculaDatosDTO } from 'src/dtos/MatriculaDatosDTO';
-import { Alumno } from 'src/model/Alumno';
 import { Curso } from 'src/model/Curso';
 import { Matricula } from 'src/model/Matricula';
 import { Repository } from 'typeorm';
