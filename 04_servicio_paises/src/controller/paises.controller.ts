@@ -30,7 +30,7 @@ export class PaisesController {
 
   @Get('continentes')
   continentes(){
-    return this.paisesService.findAllContinentes;
+    return this.paisesService.findAllContinentes();
   }
 
 }
