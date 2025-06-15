@@ -12,8 +12,9 @@ import { MatriculaService } from 'src/service/matricula.service';
 import { Response } from 'express';
 import { MatriculaNuevaDTO } from 'src/dtos/MatriculaNuevaDTO';
 import { CursoResultadoDTO } from 'src/dtos/CursoResultadoDTO';
-import { AlumnoResultadoDTO } from 'src/dtos/AlumnOResultadoDTO';
+import { AlumnoResultadoDTO } from 'src/dtos/AlumnoResultadoDTO';
 import { CursoAltaDTO } from 'src/dtos/CursoAltaDTO';
+import { AlumnoAltaDTO } from 'src/dtos/AlumnoAltaDTO';
 
 
 @Controller('formacion')
@@ -46,6 +47,11 @@ export class FormacionController {
   @Post('nuevoCurso')
   nuevoCurso(@Body() curso:CursoAltaDTO){
     return this.cursoService.save(curso);
+  }
+
+  @Post('nuevoAlumno')
+  nuevoAlumno(@Body() alumno:AlumnoAltaDTO){
+    return this.alumnoService.save(alumno);
   }
   
 }
