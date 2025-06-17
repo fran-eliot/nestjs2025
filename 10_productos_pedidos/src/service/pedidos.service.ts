@@ -25,7 +25,7 @@ export class PedidosService {
           prod.stock=prod.stock-pedido.unidades;
           this.productosRepository.save(prod);
           const fecha:Date = new Date();
-          const pedidoNuevo:Pedido = new Pedido(0, prod,pedido.unidades,pedido.precioUnitario*pedido.unidades,fecha);
+          const pedidoNuevo:Pedido = new Pedido(0, pedido.unidades,pedido.precioUnitario*pedido.unidades,fecha,prod);
           this.pedidosRepository.save(pedidoNuevo);
           return true;
         }else{
