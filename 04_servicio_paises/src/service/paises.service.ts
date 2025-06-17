@@ -5,7 +5,8 @@ import { Pais } from 'src/model/Pais';
 
 @Injectable()
 export class PaisesService {
-  urlGlobal:string = 'https://restcountries.com/v2/all';
+  urlGlobal:string= 'https://restcountries.com/v2/all?fields=name,region,flag,population,capital';
+  // urlGlobal:string = 'https://restcountries.com/v2/all';
   private readonly logger = new Logger(PaisesService.name);
 
   // constructor(private readonly http:HttpService){
