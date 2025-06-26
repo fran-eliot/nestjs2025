@@ -15,7 +15,7 @@ export class ClientesService {
     .andWhere('password= :pw',{pw:pass})
     .getOne();
     if (cliente){
-      return new ClienteDatosdto(cliente.usuario,cliente.password,cliente.email, cliente.telefono);
+      return new ClienteDatosdto(cliente.idCliente,cliente.usuario,cliente.password,cliente.email, cliente.telefono);
     }else{
       return null;
     }

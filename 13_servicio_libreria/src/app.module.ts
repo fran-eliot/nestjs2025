@@ -7,8 +7,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Cliente } from './model/Cliente';
 import { Libro } from './model/Libro';
 import { Venta } from './model/Venta';
-import { PassportModule } from '@nestjs/passport';
-import { JwtModule } from '@nestjs/jwt';
+
 
 @Module({
   imports: [TypeOrmModule.forRoot({
